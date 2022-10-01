@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="MainView" style="flex-direction: row;">
+        <Style src="DefaultStyle.uss" />
+        <ui:VisualElement name="Sdks" style="width: 25%; border-left-color: rgb(47, 47, 47); border-right-color: rgb(47, 47, 47); border-top-color: rgb(47, 47, 47); border-bottom-color: rgb(47, 47, 47); border-right-width: 3px;">
+        </ui:VisualElement>
+        <ui:VisualElement name="SdkSetting" style="width: 75%; height: 100%; border-left-width: 0; border-right-width: 3px; border-top-width: 0; border-bottom-width: 3px; border-left-color: rgb(47, 47, 47); border-right-color: rgb(47, 47, 47); border-top-color: rgb(47, 47, 47); border-bottom-color: rgb(47, 47, 47);">
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
