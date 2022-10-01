@@ -11,7 +11,10 @@ public class CarModel : ObjectModel
     [SerializeField] private float sensitivity;
     [SerializeField] private float rotationAngle;
     [SerializeField] private float rotationSpeed;
+    [SerializeField] private int dragSpeed;
     [SerializeField] private PointerController pointerController;
+    [SerializeField] private Rigidbody rb;
+
 
     private bool finishLineReached;
     private bool isSwiping;
@@ -41,6 +44,22 @@ public class CarModel : ObjectModel
     public void OnCrushEnded()
     {
         pointerController.ResetPointer();
+    }
+
+    public void OnDragStarted()
+    {
+        rb.velocity = transform.forward * dragSpeed;
+    }
+
+    public void OnDragAddSpeed(float dragAdditionalSpeed)
+    {
+        rb.velocity += transform.forward * dragAdditionalSpeed;
+    }
+
+    public void OnDragEnd()
+    {
+        var startVel = rb.velocity;
+        DOTween.To(() => startVel, x => rb.velocity = x, Vector3.zero, 1f);
     }
 
     public void OnPointerDown()

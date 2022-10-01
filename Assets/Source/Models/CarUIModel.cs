@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CarCanvasModel : ObjectModel
+public class CarUIModel : ObjectModel
 {
     [SerializeField] private Image fillBar;
 

@@ -8,11 +8,10 @@ using UnityEngine;
 public class CarController : ControllerBaseModel
 {
     [SerializeField] private SplineFollower follower;
-    [SerializeField] private CarCanvasModel canvasModel;
+    [SerializeField] private CarUIModel carUIModel;
     [SerializeField] private CarModel carModel;
     [SerializeField] private DragScreen dragScreen;
     [SerializeField] private Animator animator;
-    [SerializeField] private Rigidbody rb;
     [SerializeField] private GameObject dragEffects;
     [SerializeField] private float mainSpeed;
     [SerializeField] private float speedPerLevel;
@@ -20,13 +19,12 @@ public class CarController : ControllerBaseModel
     [SerializeField] private float collectableSpeedBoost;
     [SerializeField] private int mainIncomeAmount;
     [SerializeField] private int incomePerLevel;
-    [SerializeField] private int dragSpeed;
     [SerializeField] private int dragAdditionalSpeed;
     [SerializeField] private int dragMaxTapCount;
     [SerializeField] private int maxCrushCount;
     
-    private float speed => mainSpeed + (speedPerLevel * (PlayerDataModel.Data.SpeedLevel));
-    private int incomeAmount => mainIncomeAmount + (incomePerLevel * (PlayerDataModel.Data.IncomeLevel));
+    private float Speed => mainSpeed + (speedPerLevel * (PlayerDataModel.Data.SpeedLevel));
+    private int IncomeAmount => mainIncomeAmount + (incomePerLevel * (PlayerDataModel.Data.IncomeLevel));
     
     private float dragTimer;
     private int dragTapCount;
@@ -40,7 +38,7 @@ public class CarController : ControllerBaseModel
     {
         follower.enabled = true;
         follower.follow = true;
-        follower.followSpeed = speed;
+        follower.followSpeed = Speed;
         earnedMoney = 0;
         dragTimer = dragTime;
         dragTapCount = 0;
@@ -65,12 +63,12 @@ public class CarController : ControllerBaseModel
         {
             EndLevel(false);
         }
-        canvasModel.UpdateFillAmount(1f - ((float)crushCount / (float)maxCrushCount));
+        carUIModel.UpdateFillAmount(1f - ((float)crushCount / (float)maxCrushCount));
         follower.follow = false;
         animator.Play("Crush");
         ParticlesController.SetParticle(0, transform.position, VibrationTypes.RigidImpact);
         onAnimation = true;
-        GetMoney(-incomeAmount);
+        GetMoney(-IncomeAmount);
     }
 
     public void OnCrushAnimEnded()
@@ -83,9 +81,9 @@ public class CarController : ControllerBaseModel
     private void OnCollect()
     {
         if (crushCount > 0) crushCount--;
-        canvasModel.UpdateFillAmount(1f - ((float)crushCount / (float)maxCrushCount));
+        carUIModel.UpdateFillAmount(1f - ((float)crushCount / (float)maxCrushCount));
         follower.followSpeed += collectableSpeedBoost;
-        GetMoney(incomeAmount);
+        GetMoney(IncomeAmount);
     }
     
     public void OnReachedFinishLine()
@@ -100,7 +98,7 @@ public class CarController : ControllerBaseModel
     private void StartDrag()
     {
         dragStarted = true;
-        rb.velocity = transform.forward * dragSpeed;
+        carModel.OnDragStarted();
     }
 
     public void WhenDragPointerDown()
@@ -113,21 +111,20 @@ public class CarController : ControllerBaseModel
         }
         if (dragScreen.isPointInGreen)
         {
-            rb.velocity += transform.forward * dragAdditionalSpeed;
-            GetMoney(incomeAmount);
+            carModel.OnDragAddSpeed(dragAdditionalSpeed);
+            GetMoney(IncomeAmount);
             dragEffects.SetActive(false);
             dragEffects.SetActive(true);
         }
         else
         {
-            rb.velocity -= transform.forward * dragAdditionalSpeed;
+            carModel.OnDragAddSpeed(-dragAdditionalSpeed);
         }
     }
    
     private void EndDrag()
     {
-        var startVel = rb.velocity;
-        DOTween.To(() => startVel, x => rb.velocity = x, Vector3.zero, 1f);
+        carModel.OnDragEnd();
         EndLevel(true);
 
     }
@@ -172,7 +169,6 @@ public class CarController : ControllerBaseModel
             var collectable = other.GetComponent<CollectableModel>();
             collectable.OnCollected();
             OnCollect();
-
         }
 
     }

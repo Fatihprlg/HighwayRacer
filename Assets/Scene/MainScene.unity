@@ -21743,6 +21743,7 @@ MonoBehaviour:
   sensitivity: 10
   rotationAngle: 10
   rotationSpeed: 10
+  dragSpeed: 25
   pointerController:
     PointerDownPosition: {x: 0, y: 0}
     PointerPosition: {x: 0, y: 0}
@@ -21805,6 +21806,7 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+  rb: {fileID: 1328411014}
 --- !u!65 &1242523110
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22381,22 +22383,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   follower: {fileID: 1328411010}
+  carUIModel: {fileID: 1529361852}
   carModel: {fileID: 1242523109}
-  animator: {fileID: 1328411013}
   dragScreen: {fileID: 1543098812}
-  rb: {fileID: 1328411014}
+  animator: {fileID: 1328411013}
+  dragEffects: {fileID: 249817575}
   mainSpeed: 25
   speedPerLevel: 0.5
+  dragTime: 5
+  collectableSpeedBoost: 0.5
   mainIncomeAmount: 10
   incomePerLevel: 2
-  dragSpeed: 25
   dragAdditionalSpeed: 10
   dragMaxTapCount: 3
   maxCrushCount: 3
-  dragTime: 5
-  collectableSpeedBoost: 0.5
-  dragEffects: {fileID: 249817575}
-  canvasModel: {fileID: 1529361852}
 --- !u!95 &1328411013
 Animator:
   serializedVersion: 3
@@ -37679,12 +37679,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec45df207743b6342add77adfc24849a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controllers:
-  - {fileID: 1328411011}
-  - {fileID: 1845861031}
   OnStateChange:
     m_PersistentCalls:
       m_Calls: []
+  controllers:
+  - {fileID: 1328411011}
+  - {fileID: 1845861031}
 --- !u!4 &1626362718
 Transform:
   m_ObjectHideFlags: 0
